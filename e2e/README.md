@@ -11,7 +11,7 @@ End-to-end test suite using Playwright to validate user flows and application fu
 
 - Node.js 18 or higher
 - npm (comes with Node.js)
-- **Running frontend and backend servers** (required for tests to pass)
+- **Running frontend and backend servers** (required for tests to pass (you can use a docker-compose for that))
 
 ## Getting Started
 

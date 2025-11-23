@@ -259,7 +259,7 @@ The frontend uses Vite's proxy configuration to forward `/api` requests to the b
 - [E2E Testing README](./e2e/README.md) - End-to-end testing guide with Playwright
 - [API Documentation](./docs/api.md) - API endpoints and request/response formats
 - [Database Schema](./docs/database.md) - Database structure and migrations
-- [Deployment Guide](./docs/deployment.md) - Production deployment instructions
+- [Reverse Proxy Architecture](./docs/reverse-proxy.md) - How the reverse proxy works in different deployment scenarios
 
 ---
 

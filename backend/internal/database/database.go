@@ -6,39 +6,63 @@ import (
 	"log"
 	"os"
 
-	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var DB *pgxpool.Pool
 
-func RunMigrations() error {
-	dbURL := os.Getenv("DATABASE_URL")
-	if dbURL == "" {
-		panic("environment variable DATABASE_URL is not set")
+func CreateTables() error {
+	if DB == nil {
+		return fmt.Errorf("database connection not established")
 	}
 
-	m, err := migrate.New(
-		"file://migrations",
-		dbURL,
-	)
+	ctx := context.Background()
+
+	// Create uuid-ossp extension
+	_, err := DB.Exec(ctx, `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
 	if err != nil {
-		return fmt.Errorf("failed to create migrate instance: %w", err)
-	}
-	defer m.Close()
-
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-		return fmt.Errorf("failed to run migrations: %w", err)
+		return fmt.Errorf("failed to create uuid-ossp extension: %w", err)
 	}
 
-	if err == migrate.ErrNoChange {
-		log.Println("No new migrations to apply")
-	} else {
-		log.Println("Migrations applied successfully")
+	// Create people table
+	_, err = DB.Exec(ctx, `
+		CREATE TABLE IF NOT EXISTS people (
+			id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+			name TEXT NOT NULL,
+			created_at TIMESTAMP NOT NULL DEFAULT NOW()
+		)
+	`)
+	if err != nil {
+		return fmt.Errorf("failed to create people table: %w", err)
 	}
 
+	// Create gifts table
+	_, err = DB.Exec(ctx, `
+		CREATE TABLE IF NOT EXISTS gifts (
+			id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+			person_id UUID NOT NULL REFERENCES people(id) ON DELETE CASCADE,
+			title TEXT NOT NULL,
+			description TEXT NOT NULL,
+			is_selected BOOLEAN NOT NULL DEFAULT FALSE,
+			created_at TIMESTAMP NOT NULL DEFAULT NOW()
+		)
+	`)
+	if err != nil {
+		return fmt.Errorf("failed to create gifts table: %w", err)
+	}
+
+	// Create indexes
+	_, err = DB.Exec(ctx, `CREATE INDEX IF NOT EXISTS idx_gifts_person_id ON gifts(person_id)`)
+	if err != nil {
+		return fmt.Errorf("failed to create idx_gifts_person_id index: %w", err)
+	}
+
+	_, err = DB.Exec(ctx, `CREATE INDEX IF NOT EXISTS idx_gifts_is_selected ON gifts(is_selected)`)
+	if err != nil {
+		return fmt.Errorf("failed to create idx_gifts_is_selected index: %w", err)
+	}
+
+	log.Println("Tables created successfully")
 	return nil
 }
 

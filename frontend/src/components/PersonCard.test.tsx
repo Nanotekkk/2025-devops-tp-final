@@ -12,17 +12,13 @@ describe('PersonCard', () => {
   const mockOnDelete = vi.fn();
 
   it('should render person name', () => {
-    render(
-      <PersonCard person={mockPerson} onDelete={mockOnDelete} />
-    );
+    render(<PersonCard person={mockPerson} onDelete={mockOnDelete} />);
 
     expect(screen.getByText('Santa Claus')).toBeInTheDocument();
   });
 
   it('should call onDelete when delete button is clicked', () => {
-    render(
-      <PersonCard person={mockPerson} onDelete={mockOnDelete} />
-    );
+    render(<PersonCard person={mockPerson} onDelete={mockOnDelete} />);
 
     const deleteButton = screen.getByLabelText('Delete Santa Claus');
     deleteButton.click();
@@ -31,9 +27,7 @@ describe('PersonCard', () => {
   });
 
   it('should have a link to view gifts', () => {
-    render(
-      <PersonCard person={mockPerson} onDelete={mockOnDelete} />
-    );
+    render(<PersonCard person={mockPerson} onDelete={mockOnDelete} />);
 
     const viewGiftsButton = screen.getByText(/View Gifts/i);
     expect(viewGiftsButton).toBeInTheDocument();

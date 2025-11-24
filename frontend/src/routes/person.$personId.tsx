@@ -38,8 +38,7 @@ function PersonPage() {
   });
 
   const selectMutation = useMutation({
-    mutationFn: ({ giftId }: { giftId: string }) =>
-      giftsApi.selectGift(personId, giftId),
+    mutationFn: ({ giftId }: { giftId: string }) => giftsApi.selectGift(personId, giftId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['gifts', personId] });
     },
@@ -62,9 +61,7 @@ function PersonPage() {
   if (personLoading || giftsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-4xl font-christmas text-christmas-gold">
-          Loading... 🎅
-        </div>
+        <div className="text-4xl font-christmas text-christmas-gold">Loading... 🎅</div>
       </div>
     );
   }
@@ -72,9 +69,7 @@ function PersonPage() {
   if (!person) {
     return (
       <div className="christmas-card p-12 text-center">
-        <p className="text-2xl font-christmas text-christmas-gold mb-4">
-          Person not found! 🤔
-        </p>
+        <p className="text-2xl font-christmas text-christmas-gold mb-4">Person not found! 🤔</p>
         <Link to="/" className="christmas-button">
           ← Back to Home
         </Link>

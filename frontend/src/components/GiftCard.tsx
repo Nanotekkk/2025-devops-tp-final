@@ -13,19 +13,12 @@ export function GiftCard({ gift, onDelete, onSelect }: GiftCardProps) {
         gift.is_selected ? 'ring-4 ring-christmas-gold' : ''
       } transition-all`}
     >
-      {gift.is_selected && (
-        <div className="absolute top-2 right-2 text-4xl">⭐</div>
-      )}
-      <h3 className="text-xl font-christmas font-bold mb-2 text-christmas-gold">
-        {gift.title}
-      </h3>
+      {gift.is_selected && <div className="absolute top-2 right-2 text-4xl">⭐</div>}
+      <h3 className="text-xl font-christmas font-bold mb-2 text-christmas-gold">{gift.title}</h3>
       <p className="text-white/90 mb-4">{gift.description}</p>
       <div className="flex gap-2">
         {!gift.is_selected && (
-          <button
-            onClick={() => onSelect(gift.id)}
-            className="christmas-button flex-1"
-          >
+          <button onClick={() => onSelect(gift.id)} className="christmas-button flex-1">
             ⭐ Select as Final Gift
           </button>
         )}

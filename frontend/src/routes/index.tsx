@@ -44,9 +44,7 @@ function HomePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-4xl font-christmas text-christmas-gold">
-          Loading... 🎅
-        </div>
+        <div className="text-4xl font-christmas text-christmas-gold">Loading... 🎅</div>
       </div>
     );
   }
@@ -64,11 +62,7 @@ function HomePage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {people.map((person) => (
-            <PersonCard
-              key={person.id}
-              person={person}
-              onDelete={handleDeletePerson}
-            />
+            <PersonCard key={person.id} person={person} onDelete={handleDeletePerson} />
           ))}
         </div>
       )}

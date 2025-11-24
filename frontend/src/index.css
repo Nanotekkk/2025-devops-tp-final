@@ -1,18 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-christmas-red: #C41E3A;
-  --color-christmas-green: #165B33;
-  --color-christmas-gold: #FFD700;
-  --color-christmas-white: #FFFAFA;
-  --color-christmas-darkGreen: #0F3D20;
-  
-  --font-family-christmas: "Mountains of Christmas", cursive;
+  --color-christmas-red: #c41e3a;
+  --color-christmas-green: #165b33;
+  --color-christmas-gold: #ffd700;
+  --color-christmas-white: #fffafa;
+  --color-christmas-darkGreen: #0f3d20;
+
+  --font-family-christmas: 'Mountains of Christmas', cursive;
 }
 
 body {
-  background: linear-gradient(to bottom right, var(--color-christmas-darkGreen), var(--color-christmas-green), var(--color-christmas-red));
+  background: linear-gradient(
+    to bottom right,
+    var(--color-christmas-darkGreen),
+    var(--color-christmas-green),
+    var(--color-christmas-red)
+  );
   min-height: 100vh;
   color: var(--color-christmas-white);
 }
@@ -22,7 +27,9 @@ body {
   backdrop-filter: blur(12px);
   border: 1px solid rgb(255 215 0 / 0.3);
   border-radius: 0.5rem;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .christmas-button {
@@ -32,12 +39,16 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   transition: all 200ms;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .christmas-button:hover {
   background-color: rgb(196 30 58 / 0.8);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .christmas-input {

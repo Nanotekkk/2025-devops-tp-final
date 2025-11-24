@@ -13,16 +13,16 @@ import (
 )
 
 func main() {
-	// Run database migrations
-	if err := database.RunMigrations(); err != nil {
-		log.Fatal("Failed to run migrations:", err)
-	}
-
 	// Connect to database
 	if err := database.Connect(); err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 	defer database.Close()
+
+	// Create tables if they don't exist
+	if err := database.CreateTables(); err != nil {
+		log.Fatal("Failed to create tables:", err)
+	}
 
 	// Create handlers
 	personHandler := handlers.NewPersonHandler()

@@ -22,6 +22,7 @@ export function Snowflakes() {
         fontSize: Math.random() * 10 + 10,
       });
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     setSnowflakes(flakes);
   }, []);
 

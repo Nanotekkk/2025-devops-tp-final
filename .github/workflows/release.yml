@@ -1,61 +1,57 @@
-name: Release - Create GitHub Release
+name: Automatic Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
-  create-release:
+  release:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Get release notes from commits
-        id: release_notes
+      - name: Extract version from git tag or branch
+        id: version
         run: |
-          # Get commits since last tag
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$LAST_TAG" ]; then
-            COMMITS=$(git log --pretty=format:"- %s (%h)" --reverse)
-          else
-            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s (%h)" --reverse)
+          # Essayer d'obtenir le tag le plus récent pointant sur HEAD
+          VERSION=$(git describe --exact-match --tags HEAD 2>/dev/null || echo "")
+          
+          # Si pas de tag, essayer d'extraire depuis le nom de la branche
+          if [ -z "$VERSION" ]; then
+            BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+            if [[ $BRANCH_NAME =~ (V[0-9]+(\.[0-9]+)*) ]]; then
+              VERSION="${BASH_REMATCH[1]}"
+            fi
           fi
           
-          # Create release notes
-          RELEASE_NOTES=$(cat <<EOF
-          ## Changes in this release
-          
-          $COMMITS
-          
-          ## Docker Images
-          
-          - Backend: \`${{ secrets.DOCKER_USERNAME }}/christmas-gifts-backend:${{ github.ref_name }}\`
-          - Frontend: \`${{ secrets.DOCKER_USERNAME }}/christmas-gifts-frontend:${{ github.ref_name }}\`
-          EOF
-          )
-          
-          # Escape newlines for output
-          RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
-          
-          echo "notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Version détectée: $VERSION"
+
+      - name: Check if version exists
+        id: check
+        run: |
+          if [ -n "${{ steps.version.outputs.version }}" ] && [[ "${{ steps.version.outputs.version }}" =~ ^V[0-9]+(\.[0-9]+)*$ ]]; then
+            echo "is_release=true" >> $GITHUB_OUTPUT
+            echo "✅ Version valide détectée"
+          else
+            echo "is_release=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Aucune version valide détectée"
+          fi
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        if: steps.check.outputs.is_release == 'true'
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          body: ${{ steps.release_notes.outputs.notes }}
+          tag: ${{ steps.version.outputs.version }}
+          name: Release ${{ steps.version.outputs.version }}
           draft: false
-          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false

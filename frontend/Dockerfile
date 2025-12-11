@@ -1,31 +1,19 @@
-# Build stage
-FROM node:18-alpine AS builder
+FROM node:24-alpine AS build-stage
 
 WORKDIR /app
+COPY package*.json ./
+RUN npm install
 
-# Copy package files
-COPY package.json package-lock.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Production stage
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
-# Install a simple HTTP server to serve the built files
-RUN npm install -g serve
-
-# Copy built application from builder stage
-COPY --from=builder /app/dist ./dist
+ENV BACKEND_URL=http://localhost:8080
 
 EXPOSE 5173
 
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["/bin/sh", "-c", "envsubst '${BACKEND_URL}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]

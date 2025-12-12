@@ -1,6 +1,7 @@
 import type { Person, Gift, CreatePersonInput, CreateGiftInput, UpdateGiftInput } from '../types';
 
-const API_BASE = '/api';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+const API_BASE = BACKEND_URL ? `${BACKEND_URL}/api` : '/api';
 
 // People API
 export const peopleApi = {

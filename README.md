@@ -260,7 +260,10 @@ The frontend uses Vite's proxy configuration to forward `/api` requests to the b
 - [API Documentation](./docs/api.md) - API endpoints and request/response formats
 - [Database Schema](./docs/database.md) - Database structure and migrations
 - [Reverse Proxy Architecture](./docs/reverse-proxy.md) - How the reverse proxy works in different deployment scenarios
+-
 
 ---
+
+- [Deployment Process](./DEPLOY.md) - Detail du déployement du projet et des problemes.
 
 Made with care for Christmas

@@ -2,7 +2,7 @@
 
 This project is configured to deploy on **Render** (backend), **Netlify** (frontend), and **Neon** (PostgreSQL).
 
-## Fastest Path to Production
+## 🚀 Fastest Path to Production (15 minutes)
 
 ### 1. Create a Neon Database (5 min)
 - Go to https://console.neon.tech
@@ -41,13 +41,14 @@ Go to **Settings → Secrets and variables → Actions**, add:
 - Add a gift
 - ✅ Done!
 
-## Detailed Guides
+## 📚 Detailed Guides
 
-- Full deployment walkthrough: [`docs/deploy-render-netlify-neon.md`](docs/deploy-render-netlify-neon.md)
-- GitHub secrets setup: [`docs/github-secrets.md`](docs/github-secrets.md)
-- Local testing: [`README.md`](README.md)
+- **Step-by-step with screenshots & commands**: [`DEPLOYMENT_CHECKLIST.md`](DEPLOYMENT_CHECKLIST.md) ⭐ **Start here for full setup**
+- **Architecture & troubleshooting**: [`docs/deploy-render-netlify-neon.md`](docs/deploy-render-netlify-neon.md)
+- **GitHub secrets configuration**: [`docs/github-secrets.md`](docs/github-secrets.md)
+- **Local testing first**: [`README.md`](README.md)
 
-## Architecture
+## 🏗️ Architecture
 
 ```
 Netlify (React SPA)
@@ -57,13 +58,13 @@ Render (Go backend)
 Neon (PostgreSQL)
 ```
 
-## Continuous Deployment
+## 🔄 Continuous Deployment
 
 - Push to `main` → GitHub Actions runs tests + builds images
 - Docker images pushed to Docker Hub automatically
 - (Optional) Configure Render/Netlify webhooks for auto-deploy on git push
 
-## Cost Estimate (Monthly)
+## 💰 Cost Estimate (Monthly)
 
 - **Neon**: Free tier (1 project, up to 1 GB storage)
 - **Render**: ~$7/month (Web Service free tier, or $7 for starter)

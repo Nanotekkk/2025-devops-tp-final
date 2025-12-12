@@ -46,3 +46,12 @@ yarn-error.log*
 # Go
 *.test
 *.out
+# Documentation (non-essential)
+DEPLOYMENT_CHECKLIST.md
+
+# MacOS
+*.DS_Store
+
+# Tmp files
+tmp/
+temp/
